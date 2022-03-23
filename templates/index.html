@@ -1,0 +1,372 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+      
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static' , filename = 'home_icon.png') }}" style="display:block">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+      
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+   
+    <title>House Price Prediction</title>
+      
+    <style type="text/css">
+    
+            body 
+            {
+                    margin: 0;
+                    font-family: Arial, Helvetica, sans-serif;
+            }
+
+            .topnav 
+            {
+                    overflow: hidden;
+/*                    background-color:gre;*/
+            }
+
+            .topnav a 
+            {
+                      float: left;
+                      display: block;
+                      color: black;
+                      text-align: center;
+                      padding: 14px 16px;
+                      text-decoration: none;
+                      font-size: 27px;
+            }
+
+            .topnav a:hover 
+            {
+/*                      background-color: #ddd;*/
+                      color:cadetblue;
+                        
+            }
+
+            .topnav a.active 
+            {
+/*                      background-color: #04AA6D;*/
+                      color: black;
+            }
+        
+            .topnav a.active:hover
+        {
+                color: cadetblue
+        }
+
+            .topnav .icon 
+            {
+                        display: none;
+            }
+
+            @media screen and (max-width: 600px) 
+            {
+                      .topnav a:not(:first-child) {display: none;}
+                      .topnav a.icon {
+                        float: right;
+                        display: block;
+                      }
+            }
+
+            @media screen and (max-width: 600px)
+            {
+                      .topnav.responsive {position: relative;}
+                      .topnav.responsive .icon {
+                        position: absolute;
+                        right: 0;
+                        top: 0;
+              }
+                  .topnav.responsive a 
+                {
+                    float: none;
+                    display: block;
+                    text-align: left;
+                  }
+            }
+      
+    </style>
+      
+  </head>
+  <body>
+      
+      <div class = "row">
+          <div class = "card" style="width: 100% ; height: 100%">
+                <div class = "card-header" style="text-align: center">
+                    <div class="topnav" id="myTopnav">
+                        <a class="active" href="#home"><b>Home</b></a>
+                        <a href="#Prediction"><b>Prediction</b></a>
+                        <a href="#about"><b>About</b></a>
+                        <a href="#contact"><b>Contact Us</b></a>
+                        <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+                        <i class="fa fa-bars"></i>
+                        </a>
+                    </div>
+              </div>
+          </div>
+        <img src="static/house.jpg" width="350px" height="520px">
+      </div>
+      
+        <div class="row">
+            <div class = "card" style="width: 100% ; height: 100%">
+                <div class = "card-header" style="text-align: center">
+                    <h1>House Price Predictor</h1>
+                </div>
+                <br>
+                <div class = "card-body" id = "Prediction">
+                    <form method = "post" accept-charset="utf-8">
+                        <div class="container col-md-6">
+                            
+                            <div class="row" style="align-items: center">
+                                <div class="form-group" style="text-align: center">
+                                    <label style="font-size: 20px"><b>Select the City:</b></label>
+                                    <select class="selectpicker from-control col-md-12" id="city" name="city" required="1" style="height: 40px ; border-radius: 4px ; border-color: #ced4da ; padding-top: 0.375rem ; padding-bottom: 0.375rem ; padding-left: 0.75rem ; padding-right: 0.75rem">
+                                            {%for c in City%}
+                                                <option value="{{ c }}" style="font-size: 15px">{{ c }}</option>
+                                            {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <br>
+                            
+                            <div class="row" style="align-items: center">
+                                <div class="form-group" style="text-align: center">
+                                    <label style="font-size: 20px"><b>Select the BHK:</b></label>
+                                    <select class="selectpicker from-control col-md-12" id="bhk" name="bhk" required="1" style="height: 40px ; border-radius: 4px ; border-color: #ced4da ; padding-top: 0.375rem ; padding-bottom: 0.375rem ; padding-left: 0.75rem ; padding-right: 0.75rem">
+                                            {%for c in BHK%}
+                                                <option value="{{ c }}" style="font-size: 15px">{{ c }}</option>
+                                            {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <br>
+                            
+                            <div class="row" style="align-items: center">
+                                <div class="form-group" style="text-align: center">
+                                    <label style="font-size: 20px"><b>Enter the Square-Feet:</b></label>
+                                    <input type="text" class="form-control" id="sqft" name="sqft" placeholder="Enter Square Feet">
+                                </div>
+                            </div>
+                            <br>
+                            <br>
+                            
+                            <div class="row" style="align-items: center">
+                                <div class="form-group" style="text-align: center">
+                                    <button class="btn btn-success form-control" onclick="send_data()" style="font-size: 20px">Show Price</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <br>
+                    <br>
+                    
+                    <div class="container col-md-6">
+                        <div class="row" style="text-align: center">
+                            <h3><span id = "prediction"></span></h3>
+                        </div>
+                    </div>
+                    
+                </div>
+                
+                <br>
+                
+                <div class="card-footer" style="text-align: center" id="about">
+                    <h1>About House Price Prediction</h1>
+                </div>
+                
+            </div>
+        </div>
+        
+        <br>
+        <br>
+      
+        <div class="row">  
+            <div class="col-md-6">
+                <img src="static/second_home.jpg" width="550px" height="550px" style="margin-left: 100px">
+            </div>
+            <div class="col-md-6">
+                <p style="font-family: sans-serif ; font-size: 20px ; margin-right: 60px">
+                    The prediction of house prices is an important aspect of the real world. There are various factors that could affect the price of houses in the country. There are various parts of the country where the determination of house price is completely controlled by some real estate agents which can be varying from person to person. There are no qualitative standards that are used by them to predict prices, so there is a huge fluctuation in real prices and prices stated by agents.
+                </p>
+                
+                <p style="font-family: sans-serif ; font-size: 20px ; margin-right: 60px">
+                    With the help of various Machine Learning algorithms and Data Analysis, the above issue can be overcome. The “House Price Prediction ” is a Machine Learning model which uses past recorded data to predict the prices of houses based on user requirements. It makes use of Python libraries like NumPy, Pandas, Sci-kit learn to train the model using the past data. It uses the supervised learning technique as it makes use of labeled data. The prediction made by the model is a continuous value so we make use of Multivariate Linear Regression. 
+                </p>
+                
+                <p style="font-family: sans-serif ; font-size: 20px ; margin-right: 60px">  
+                    The dataset used to train the model was downloaded from the Kaggle Datasets which is an internet-based open-source dataset. The dataset contains the prices of houses in various cities across the country and with different features as well. The R2 score of the model is 0.8423 which provides a good accuracy of our model.
+                </p>
+            </div>
+        </div>
+        
+        <br>
+        <br>
+      
+        <div class="row">
+            <div class="card" style="width: 100% ; height: 100%" id="contact">
+                <div class = "card-header" style="text-align: center">
+                    <h1>Contact Us</h1>
+                </div>
+                
+                <br>
+                
+                
+                <div class = "card-body" >
+                    <form method = "post" accept-charset="utf-8" action="{{ url_for('contact') }}">
+                        <div class="container col-md-6">
+                        
+                            <div class="row" style="align-items: center">
+                                <div class="form-group" >
+                                    <label style="font-size: 20px"><b>Enter Your Name:</b></label>
+                                    <input type="text" class="form-control" id="name" name="name" placeholder="Enter Name" required>
+                                </div>
+                            </div>
+                            <br>
+                            
+                            <div class="row" style="align-items: center">
+                                <div class="form-group" >
+                                    <label style="font-size: 20px"><b>Enter Your Email:</b></label>
+                                    <input type="email" class="form-control" id="email" name="email" placeholder="Enter email" required>
+                                </div>
+                            </div>
+                            <br>
+                            
+                            <div class="row" style="align-items: center">
+                                <div class="form-group" >
+                                    <label style="font-size: 20px"><b>Enter Your Contact Number:</b></label>
+                                    <input type="tel" class="form-control" id="cn" name="cn" placeholder="Enter contact Number" required>
+                                </div>
+                            </div>
+                            <br>
+                            
+                            <div class="row" style="align-items: center">
+                                <div class="form-group" >
+                                    <label style="font-size: 20px"><b>Enter Your Message:</b></label>
+                                    <textarea class = "form-control" id="message" name="message" rows="4" cols="50" placeholder="Enter Message" required>
+                                    </textarea>
+                                </div>
+                            </div>
+                            <br>
+                            <br>
+                            
+                            <div class="row" style="align-items: center">
+                                <div class="form-group" style="text-align: center">
+                                    <button class="btn btn-primary form-control" onclick="send_email()" style="font-size: 20px">Send</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    
+                    <br>
+                    <br>
+                    
+                    <div class="container col-md-6">
+                        <div class="row" style="text-align: center">
+                            <h3  id = "response_message">{{ response_message }}</h3>
+                        </div>
+                    </div>
+                    
+                </div>
+                
+                <br>
+                
+                <div class="card-footer" style="text-align: center">
+                    <h1>Copyright &copy; Your Website 2022</h1>
+                </div>    
+                
+            </div>
+        </div>
+      
+        <script>
+            
+            function form_handler(event)
+            {
+                event.preventDefault(); //Don't submit the form normally
+            }
+            
+            function send_data()
+            {   
+                
+                document.querySelector('form').addEventListener("submit",form_handler);
+
+                var fd = new FormData(document.querySelector('form'));
+
+                var xhr = new XMLHttpRequest();
+
+                xhr.open('POST' , '/predict' , true);
+
+                document.getElementById("prediction").innerHTML = "Wait for Price.....";
+
+                xhr.onreadystatechange = function()
+                {
+                    if(xhr.readyState == XMLHttpRequest.DONE)
+                        {   
+                            document.getElementById("prediction").innerHTML = xhr.responseText;
+                        }
+                };
+
+                xhr.onload = function(){};
+                xhr.send(fd);   
+            }
+            
+      </script>
+      
+      <script>
+          
+//            function form_handler(event)
+//            {
+//                event.preventDefault(); //Don't submit the form normally
+//            }
+//            
+//            function send_email()
+//            {               
+//////                
+//                document.querySelector('form').addEventListener("submit",form_handler);
+//
+//                var fd = new FormData(document.querySelector('form'));
+//
+//                var xhr = new XMLHttpRequest();
+//
+//                xhr.open('POST' , '/contact' , true);
+//
+//                document.getElementById("response_message").innerHTML = "Wait for responce.....";
+//
+//                xhr.onreadystatechange = function()
+//                {
+//                    if(xhr.readyState == XMLHttpRequest.DONE)
+//                        {   
+//                            document.getElementById("response_message").innerHTML = xhr.responseText;
+//                        }
+//                };
+//
+//                xhr.onload = function(){};
+//
+//                xhr.send(fd);                
+//
+//            }
+            
+      </script>
+      
+      <script>
+            function myFunction() {
+              var x = document.getElementById("myTopnav");
+              if (x.className === "topnav") {
+                x.className += " responsive";
+              } else {
+                x.className = "topnav";
+              }
+            }
+      </script>
+
+      
+    <!-- Option 2: Separate Popper and Bootstrap JS -->
+    
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
+      
+  </body>
+</html> 
